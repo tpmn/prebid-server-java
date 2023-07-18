@@ -10,6 +10,8 @@ adapters:
     enabled: true
   rubicon:
     enabled: true
+  tpmn:
+    enabled: true
 metrics:
   prefix: prebid
 cache:
