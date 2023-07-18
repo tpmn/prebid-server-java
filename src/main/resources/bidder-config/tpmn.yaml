@@ -1,7 +1,6 @@
 adapters:
   tpmn:
-    #endpoint: https://gat.tpmn.io/ortb/pbs_bidder
-    endpoint: http://localhost:8081/ortb/pbs_bidder
+    endpoint: https://gat.tpmn.io/ortb/pbs_bidder
     endpoint-compression: gzip
     modifyingVastXmlAllowed: true
     meta-info:
