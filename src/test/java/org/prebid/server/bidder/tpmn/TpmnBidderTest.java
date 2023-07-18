@@ -7,7 +7,6 @@ import com.iab.openrtb.request.*;
 import com.iab.openrtb.response.Bid;
 import com.iab.openrtb.response.BidResponse;
 import com.iab.openrtb.response.SeatBid;
-import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -80,38 +79,6 @@ public class TpmnBidderTest extends VertxTest {
 
     }
 
-//    @Test
-//    public void makeHttpRequestsShouldReturnErrorIfDeviceIsAbsent() {
-//        // given
-//        final BidRequest bidRequest = givenBidRequest(bidRequestBuilder -> bidRequestBuilder.device(null), identity());
-//
-//        // when
-//        final Result<List<HttpRequest<BidRequest>>> result = tpmnBidder.makeHttpRequests(bidRequest);
-//
-//        // then
-//        assertThat(result.getValue()).isEmpty();
-//        assertThat(result.getErrors())
-//                .containsAnyOf(BidderError.badInput("Request is missing device UA information"),
-//                        BidderError.badInput("Request is missing device OS information"));
-//
-//
-//    }
-
-//    @Test
-//    public void makeHttpRequestsShouldReturnErrorIfDeviceOsIsAbsent() {
-//        // given
-//        final BidRequest bidRequest = givenBidRequest(bidRequestBuilder ->
-//                bidRequestBuilder.device(Device.builder().build()), identity());
-//
-//        // when
-//        final Result<List<HttpRequest<BidRequest>>> result = tpmnBidder.makeHttpRequests(bidRequest);
-//
-//        // then
-//        assertThat(result.getValue()).isEmpty();
-//        assertThat(result.getErrors())
-//                .containsAnyOf(BidderError.badInput("Request is missing device UA information"),
-//                        BidderError.badInput("Request is missing device OS information"));
-//    }
 
     @Test
     public void makeHttpRequestsShouldTakeSizesFromFormatIfBannerSizesNotExists() {
@@ -214,8 +181,7 @@ public class TpmnBidderTest extends VertxTest {
                 impBuilder -> impBuilder
                         .id("123")
                         .video(Video.builder().build())
-                        .ext(mapper.valueToTree(ExtPrebid.of(null, ExtImpTpmn.of(
-                                "inventoryId", "publisherId")))));
+                        .ext(mapper.valueToTree(ExtPrebid.of(null, ExtImpTpmn.of(10000001)))));
         // when
         final Result<List<HttpRequest<BidRequest>>> result = tpmnBidder.makeHttpRequests(bidRequest);
 
@@ -224,30 +190,13 @@ public class TpmnBidderTest extends VertxTest {
                 .extracting(HttpRequest::getPayload)
                 .flatExtracting(BidRequest::getImp)
                 .extracting(Imp::getTagid)
-                .containsExactly("inventoryId");
+                .containsExactly(String.valueOf(10000001));
         assertThat(result.getErrors()).allSatisfy(error -> {
             assertThat(error.getType()).isEqualTo(BidderError.Type.bad_input);
             assertThat(error.getMessage()).startsWith("Cannot deserialize value of type");
         });
     }
 
-//    @Test
-//    public void makeHttpRequestsShouldCreateCorrectURL() {
-//        // given
-//        final BidRequest bidRequest = givenBidRequest(impBuilder -> impBuilder
-//                .id("123")
-//                .video(Video.builder().build())
-//                .ext(mapper.valueToTree(ExtPrebid.of(null, ExtImpTpmn.of("inventoryId","publisherId")))));
-//
-//        // when
-//        final Result<List<HttpRequest<BidRequest>>> result = tpmnBidder.makeHttpRequests(bidRequest);
-//
-//        // then
-//        assertThat(result.getErrors()).isEmpty();
-//        assertThat(result.getValue()).hasSize(1)
-//                .extracting(HttpRequest::getUri)
-//                .containsExactly("https://randomurl.com/publisherId/inventoryId");
-//    }
 
     @Test
     public void makeHttpRequestsShouldCreateRequestPerImp() {
@@ -256,12 +205,10 @@ public class TpmnBidderTest extends VertxTest {
                 identity(),
                 impBuilder -> impBuilder
                         .video(Video.builder().build())
-                        .ext(mapper.valueToTree(ExtPrebid.of(null, ExtImpTpmn.of(
-                                "inventoryId","publisherId")))),
+                        .ext(mapper.valueToTree(ExtPrebid.of(null, ExtImpTpmn.of(10000001)))),
                 impBuilder -> impBuilder
                         .video(Video.builder().build())
-                        .ext(mapper.valueToTree(ExtPrebid.of(null, ExtImpTpmn.of(
-                                "inventoryId","publisherId")))));
+                        .ext(mapper.valueToTree(ExtPrebid.of(null, ExtImpTpmn.of(10000001)))));
 
         // when
         final Result<List<HttpRequest<BidRequest>>> result = tpmnBidder.makeHttpRequests(bidRequest);
@@ -281,12 +228,10 @@ public class TpmnBidderTest extends VertxTest {
         final BidRequest bidRequest = givenBidRequest(
                 identity(),
                 impBuilder -> impBuilder
-                        .ext(mapper.valueToTree(ExtPrebid.of(null, ExtImpTpmn.of(
-                                "inventoryId","publisherId")))),
+                        .ext(mapper.valueToTree(ExtPrebid.of(null, ExtImpTpmn.of(10000001)))),
                 impBuilder -> impBuilder
                         .video(Video.builder().build())
-                        .ext(mapper.valueToTree(ExtPrebid.of(null, ExtImpTpmn.of(
-                                "inventoryId","publisherId")))));
+                        .ext(mapper.valueToTree(ExtPrebid.of(null, ExtImpTpmn.of(10000001)))));
 
         // when
         final Result<List<HttpRequest<BidRequest>>> result = tpmnBidder.makeHttpRequests(bidRequest);
@@ -306,18 +251,15 @@ public class TpmnBidderTest extends VertxTest {
                 impBuilder -> impBuilder
                         .id("id1")
                         .banner(Banner.builder().w(5).h(5).build())
-                        .ext(mapper.valueToTree(ExtPrebid.of(null, ExtImpTpmn.of(
-                                "inventoryId","publisherId")))),
+                        .ext(mapper.valueToTree(ExtPrebid.of(null, ExtImpTpmn.of(10000001)))),
                 impBuilder -> impBuilder
                         .id("id2")
                         .video(Video.builder().build())
-                        .ext(mapper.valueToTree(ExtPrebid.of(null, ExtImpTpmn.of(
-                                "inventoryId","publisherId")))),
+                        .ext(mapper.valueToTree(ExtPrebid.of(null, ExtImpTpmn.of(10000001)))),
                 impBuilder -> impBuilder
                         .id("id3")
                         .xNative(Native.builder().request("{}").build())
-                        .ext(mapper.valueToTree(ExtPrebid.of(null, ExtImpTpmn.of(
-                                "inventoryId","publisherId")))));
+                        .ext(mapper.valueToTree(ExtPrebid.of(null, ExtImpTpmn.of(10000001)))));
 
         // when
         final Result<List<HttpRequest<BidRequest>>> result = tpmnBidder.makeHttpRequests(bidRequest);
@@ -426,7 +368,7 @@ public class TpmnBidderTest extends VertxTest {
     private static Imp givenImp(Function<Imp.ImpBuilder, Imp.ImpBuilder> impCustomizer) {
         return impCustomizer.apply(Imp.builder()
                 .id("123")
-                .ext(mapper.valueToTree(ExtPrebid.of(null, ExtImpTpmn.of( "inventoryId","publisherId"))))).build();
+                .ext(mapper.valueToTree(ExtPrebid.of(null, ExtImpTpmn.of(10000001))))).build();
     }
 
     private static BidResponse givenBidResponse(Function<Bid.BidBuilder, Bid.BidBuilder>... bidCustomizers) {

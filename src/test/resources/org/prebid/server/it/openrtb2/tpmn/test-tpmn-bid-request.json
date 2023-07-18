@@ -12,8 +12,7 @@
       "ext": {
         "tid": "${json-unit.any-string}",
         "bidder": {
-          "inventoryId": "some-inventoryId",
-          "publisherId": "some-publisherId"
+          "inventoryId": 10000001
         }
       }
     }

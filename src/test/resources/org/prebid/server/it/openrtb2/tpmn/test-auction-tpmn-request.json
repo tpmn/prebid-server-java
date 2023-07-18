@@ -9,8 +9,7 @@
       },
       "ext": {
         "tpmn": {
-          "inventoryId": "some-inventoryId",
-          "publisherId": "some-publisherId"
+          "inventoryId": 10000001
         }
       }
     }

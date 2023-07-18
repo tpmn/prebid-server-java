@@ -9,8 +9,6 @@ import lombok.Value;
 public class ExtImpTpmn {
 
     @JsonProperty("inventoryId")
-    String inventoryId;
+    Integer inventoryId;
 
-    @JsonProperty("publisherId")
-    String publisherId;
 }

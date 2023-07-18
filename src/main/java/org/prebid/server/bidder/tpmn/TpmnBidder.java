@@ -70,8 +70,8 @@ public class TpmnBidder implements Bidder<BidRequest> {
     }
 
     private Imp modifyImp(Imp imp, ExtImpTpmn extImpTpmn, BidRequest request) {
-        String inventoryId = extImpTpmn.getInventoryId();
-        final Imp.ImpBuilder impBuilder = imp.toBuilder().tagid(inventoryId);
+        Integer inventoryId = extImpTpmn.getInventoryId();
+        final Imp.ImpBuilder impBuilder = imp.toBuilder().tagid(String.valueOf(inventoryId));
         final String impId = imp.getId();
         final Price resolvedBidFloor = resolveBidFloor(imp, request);
 
@@ -222,63 +222,5 @@ public class TpmnBidder implements Bidder<BidRequest> {
         return Price.of(BIDDER_CURRENCY, convertedPrice);
     }
 
-    /**
-     * 하나의 요청에 여러개의 Imp가 있을 경우 bidRequest는 여러개가 되어 같은 End-Point로 imp개수 만큼 요청을 날린다.
-     */
-
-//    private static final String PUBLISHER_ID_MACRO = "{{publisherId}}";
-//    private static final String INVENTORY_ID_MACRO = "{{inventoryId}}";
-//    @Override
-//    public Result<List<HttpRequest<BidRequest>>> makeHttpRequests(BidRequest request) {
-//        try {
-//            validateDevice(request.getDevice());
-//        } catch (PreBidException e) {
-//            return Result.withError(BidderError.badInput(e.getMessage()));
-//        }
-//
-//        final List<HttpRequest<BidRequest>> requests = new ArrayList<>();
-//        final List<BidderError> errors = new ArrayList<>();
-//
-//        for (Imp imp : request.getImp()) {
-//            final ExtImpTpmn extImpTpmn;
-//            final Imp modifiedImp;
-//            try {
-//                extImpTpmn = parseImpExt(imp);
-//                modifiedImp = modifyImp(imp, extImpTpmn.getInventoryId());
-//            } catch (PreBidException e) {
-//                errors.add(BidderError.badInput(e.getMessage()));
-//                continue;
-//            }
-//
-//            if (modifiedImp != null) {
-//                requests.add(createRequest(request, modifiedImp, extImpTpmn));
-//            }
-//        }
-//
-//        return Result.of(requests, errors);
-//    }
-
-//    private static void validateDevice(Device device) {
-//        if (device == null || StringUtils.isEmpty(device.getUa())) {
-//            throw new PreBidException("Request is missing device UA information");
-//        }
-//        if (device == null || StringUtils.isEmpty(device.getOs())) {
-//            throw new PreBidException("Request is missing device OS information");
-//        }
-//    }
-//
-//    private HttpRequest<BidRequest> createRequest(BidRequest bidRequest, Imp imp, ExtImpTpmn extImpTpmn) {
-//        final BidRequest outgoingRequest = bidRequest.toBuilder()
-//                .imp(Collections.singletonList(imp))
-//                .build();
-//
-//        return BidderUtil.defaultRequest(outgoingRequest, resolveUrl(extImpTpmn), mapper);
-//    }
-//
-//    private String resolveUrl(ExtImpTpmn extImpTpmn) {
-//        return endpointUrl
-//                .replace(PUBLISHER_ID_MACRO, HttpUtil.encodeUrl(extImpTpmn.getPublisherId()))
-//                .replace(INVENTORY_ID_MACRO, HttpUtil.encodeUrl(extImpTpmn.getInventoryId()));
-//    }
 }
 
